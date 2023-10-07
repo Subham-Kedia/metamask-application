@@ -13,16 +13,6 @@ const theme = {
       default: "#f8f8f8",
     },
   },
-  components: {
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          borderTopRightRadius: 2,
-          borderBottomRightRadius: 2,
-        },
-      },
-    },
-  },
   shape: {
     borderRadius: 4,
   },

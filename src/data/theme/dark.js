@@ -12,16 +12,6 @@ const theme = {
       paper: "#18191a",
     },
   },
-  components: {
-    MuiChip: {
-      styleOverrides: {
-        root: {
-          borderTopRightRadius: 2,
-          borderBottomRightRadius: 2,
-        },
-      },
-    },
-  },
   shape: {
     borderRadius: 4,
   },

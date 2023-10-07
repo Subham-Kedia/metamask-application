@@ -8,6 +8,7 @@ import {
 import CssBaseline from "@mui/material/CssBaseline"
 import { SnackbarProvider, closeSnackbar } from "notistack"
 import IconButton from "@mui/material/IconButton"
+import Box from "@mui/material/Box"
 import CloseIcon from "@mui/icons-material/Close"
 
 import themeConfig from "../data/theme"
@@ -18,8 +19,11 @@ import {
   getDeviceData,
 } from "../data/config/utils"
 import { LOCAL_STORAGE, THEME_TYPE } from "../data/config/constants"
+
 import Navbar from "../components/Navbar"
 import Home from "../components/Home"
+import Task2 from "../components/Task2"
+import Task3 from "../components/Task3"
 
 const themeType = getDataFromLocalStorage(
   LOCAL_STORAGE.THEME,
@@ -94,11 +98,15 @@ function App() {
             preventDuplicate
           />
           <Navbar />
-          <Router>
-            <Routes>
-              <Route path="/" element={<Home />} />
-            </Routes>
-          </Router>
+          <Box height="calc(100vh - 64px)" p={2}>
+            <Router>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/task2" element={<Task2 />} />
+                <Route path="/task3" element={<Task3 />} />
+              </Routes>
+            </Router>
+          </Box>
         </ThemeProvider>
       </ThemeModeContext.Provider>
     </DeviceContext.Provider>

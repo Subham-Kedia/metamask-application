@@ -1,4 +1,6 @@
 import { LOCAL_STORAGE } from "./constants"
+import { enqueueSnackbar } from "notistack"
+
 export const log = (...arg) => {
   if (process.env.NODE_ENV !== "production") console.log(...arg)
 }
@@ -37,7 +39,18 @@ export const formatBalance = (rawBalance) => {
   return balance.toString()
 }
 
-export const formatChainAsNum = (chainIdHex) => {
-  const chainIdNum = parseInt(chainIdHex)
-  return chainIdNum
+export const convertToNumber = (hexValue) => {
+  const number = parseInt(hexValue, 16)
+  return number
+}
+
+export const copyToClipboard = async (text) => {
+  if (navigator.clipboard) {
+    try {
+      await navigator.clipboard.writeText(text)
+      enqueueSnackbar("Copied Successfully")
+    } catch (err) {
+      log("Failed to copy: ", err)
+    }
+  }
 }
