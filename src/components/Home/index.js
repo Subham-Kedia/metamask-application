@@ -72,9 +72,9 @@ const Home = () => {
           const accounts = await window.ethereum.request({
             method: "eth_accounts",
           })
+          setPageLoading(false)
           setIsConnected(true)
           refreshAccounts(accounts)
-          setPageLoading(false)
         } catch (err) {
           setPageLoading(false)
           if (err.code === 4001)

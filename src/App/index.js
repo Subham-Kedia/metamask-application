@@ -98,17 +98,18 @@ function App() {
             )}
             preventDuplicate
           />
-          <Navbar />
-          <Box height="calc(100vh - 64px)" p={2}>
-            <Router>
+
+          <Router>
+            <Navbar />
+            <Box height="calc(100vh - 64px)" p={2}>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/task2" element={<Task2 />} />
                 <Route path="/task3" element={<Task3 />} />
                 <Route path="/task4" element={<Task4 />} />
               </Routes>
-            </Router>
-          </Box>
+            </Box>
+          </Router>
         </ThemeProvider>
       </ThemeModeContext.Provider>
     </DeviceContext.Provider>
