@@ -47,6 +47,7 @@ const Home = () => {
   useEffect(() => {
     const refreshAccounts = (accounts) => {
       if (Array.isArray(accounts) && accounts?.length > 0) {
+        setIsConnected(true)
         updateWallet(accounts)
       } else setWallet(initialState)
     }
@@ -73,7 +74,6 @@ const Home = () => {
             method: "eth_accounts",
           })
           setPageLoading(false)
-          setIsConnected(true)
           refreshAccounts(accounts)
         } catch (err) {
           setPageLoading(false)
