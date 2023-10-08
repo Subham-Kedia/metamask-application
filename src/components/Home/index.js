@@ -376,10 +376,10 @@ const Home = () => {
         </>
       ) : (
         <ShowMessage
-          src="/assets/error.png"
-          title="MetaMask Wallet not found"
+          src="/assets/metamask.png"
+          title="Welcome to our Application"
           message="Please install MetaMask Extension in your
-        browser or if already installed, Please enabled it"
+        browser or if already installed, Please enabled it under manage extension"
         >
           <Button
             variant="contained"
