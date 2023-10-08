@@ -8,6 +8,7 @@ import {
   Typography,
   Box,
   Tooltip,
+  CircularProgress,
 } from "@mui/material"
 import { lighten, darken } from "@mui/material"
 import { LoadingButton } from "@mui/lab"
@@ -40,6 +41,7 @@ const Home = () => {
   const [wallet, setWallet] = useState(initialState)
   const [isConnected, setIsConnected] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [pageLoading, setPageLoading] = useState(false)
 
   // checking whether ethereum provider exist or not
   useEffect(() => {
@@ -66,12 +68,15 @@ const Home = () => {
       // if already exists and connected, fetching all related Data
       if (provider) {
         try {
+          setPageLoading(true)
           const accounts = await window.ethereum.request({
             method: "eth_accounts",
           })
           setIsConnected(true)
           refreshAccounts(accounts)
+          setPageLoading(false)
         } catch (err) {
+          setPageLoading(false)
           if (err.code === 4001)
             enqueueSnackbar("User Denied the Request", { variant: "error" })
         }
@@ -209,124 +214,139 @@ const Home = () => {
       {hasProvider ? (
         <>
           {isConnected ? (
-            <Paper sx={{ p: 2, width: "100%", maxWidth: 500 }}>
-              <Box
-                component="img"
-                src="/assets/metamask.svg"
-                width="100px"
-                mx="auto"
-                display="block"
-                sx={{ backgroundSize: "cover" }}
-              />
-              <Typography variant="h6" align="center" mt={2}>
-                Welcome to Metamask Wallet
-              </Typography>
-              <Typography variant="body2" color="text.secondary" align="center">
-                ChainID: {wallet.chainId ? convertToNumber(wallet.chainId) : ""}
-                <Tooltip title="Copy Hex value">
-                  <IconButton
-                    size="small"
-                    sx={{ ml: 0.5 }}
-                    onClick={() => {
-                      copyToClipboard(wallet.chainId)
-                    }}
-                  >
-                    <ContentCopyIcon fontSize="inherit" />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                align="center"
-                mb={2}
-              >
-                Block Number:{" "}
-                {wallet.blockNumber ? convertToNumber(wallet.blockNumber) : ""}
-                <Tooltip title="Copy Hex value">
-                  <IconButton
-                    size="small"
-                    sx={{ ml: 0.5 }}
-                    onClick={() => copyToClipboard(wallet.blockNumber)}
-                  >
-                    <ContentCopyIcon fontSize="inherit" />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                mb={2}
-              >
-                <Typography variant="subttile1" fontWeight="fontWeightMedium">
-                  Connected Accounts
-                </Typography>
-                <LoadingButton
-                  size="small"
-                  loading={loading}
-                  onClick={handleReconnect}
-                >
-                  Manage Accounts
-                </LoadingButton>
-              </Box>
-              {wallet.accounts.length > 0 ? (
-                wallet.accounts.map((item) => (
+            <Paper sx={{ p: 2, width: "100%", maxWidth: 500, minHeight: 400 }}>
+              {pageLoading ? (
+                <CircularProgress />
+              ) : (
+                <>
                   <Box
-                    position="relative"
-                    bgcolor={(theme) =>
-                      theme.palette.mode === THEME_TYPE.DARK
-                        ? darken(theme.palette.primary.dark, 0.4)
-                        : lighten(theme.palette.primary.light, 0.7)
-                    }
-                    key={item}
-                    py={1}
-                    px={2}
-                    mb={1}
-                    borderRadius={2}
+                    component="img"
+                    src="/assets/metamask.svg"
+                    width="100px"
+                    mx="auto"
+                    display="block"
+                    sx={{ backgroundSize: "cover" }}
+                  />
+                  <Typography variant="h6" align="center" mt={2}>
+                    Welcome to Metamask Wallet
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    align="center"
                   >
-                    <Tooltip title="Copy Public Address">
+                    ChainID:{" "}
+                    {wallet.chainId ? convertToNumber(wallet.chainId) : ""}
+                    <Tooltip title="Copy Hex value">
                       <IconButton
                         size="small"
-                        sx={{ position: "absolute", top: 4, right: 8 }}
-                        onClick={() => copyToClipboard(item)}
+                        sx={{ ml: 0.5 }}
+                        onClick={() => {
+                          copyToClipboard(wallet.chainId)
+                        }}
                       >
                         <ContentCopyIcon fontSize="inherit" />
                       </IconButton>
                     </Tooltip>
-                    <Box display="flex" gap={0.5} mb={1}>
-                      <PublicIcon fontSize="small" color="info" />
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ wordBreak: "break-all", pr: 3 }}
-                      >
-                        {item}
-                      </Typography>
-                    </Box>
-                    {wallet.balance[item] ? (
-                      <Box display="flex" gap={0.5} alignItems="center">
-                        <AccountBalanceWalletIcon
-                          fontSize="small"
-                          color="secondary"
-                        />
-                        <Typography variant="h6">
-                          {wallet.balance[item]} ETH
-                        </Typography>
-                      </Box>
-                    ) : (
-                      <Button
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    align="center"
+                    mb={2}
+                  >
+                    Block Number:{" "}
+                    {wallet.blockNumber
+                      ? convertToNumber(wallet.blockNumber)
+                      : ""}
+                    <Tooltip title="Copy Hex value">
+                      <IconButton
                         size="small"
-                        variant="outlined"
-                        onClick={() => fetchBalance(item)}
-                        // sx={{ color: "secondary.light" }}
+                        sx={{ ml: 0.5 }}
+                        onClick={() => copyToClipboard(wallet.blockNumber)}
                       >
-                        Fetch Balance
-                      </Button>
-                    )}
+                        <ContentCopyIcon fontSize="inherit" />
+                      </IconButton>
+                    </Tooltip>
+                  </Typography>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    mb={2}
+                  >
+                    <Typography
+                      variant="subttile1"
+                      fontWeight="fontWeightMedium"
+                    >
+                      Connected Accounts
+                    </Typography>
+                    <LoadingButton
+                      size="small"
+                      loading={loading}
+                      onClick={handleReconnect}
+                    >
+                      Manage Accounts
+                    </LoadingButton>
                   </Box>
-                ))
-              ) : (
-                <Typography>No Connected Accounts</Typography>
+                  {wallet.accounts.length > 0 ? (
+                    wallet.accounts.map((item) => (
+                      <Box
+                        position="relative"
+                        bgcolor={(theme) =>
+                          theme.palette.mode === THEME_TYPE.DARK
+                            ? darken(theme.palette.primary.dark, 0.4)
+                            : lighten(theme.palette.primary.light, 0.7)
+                        }
+                        key={item}
+                        py={1}
+                        px={2}
+                        mb={1}
+                        borderRadius={2}
+                      >
+                        <Tooltip title="Copy Public Address">
+                          <IconButton
+                            size="small"
+                            sx={{ position: "absolute", top: 4, right: 8 }}
+                            onClick={() => copyToClipboard(item)}
+                          >
+                            <ContentCopyIcon fontSize="inherit" />
+                          </IconButton>
+                        </Tooltip>
+                        <Box display="flex" gap={0.5} mb={1}>
+                          <PublicIcon fontSize="small" color="info" />
+                          <Typography
+                            variant="subtitle2"
+                            sx={{ wordBreak: "break-all", pr: 3 }}
+                          >
+                            {item}
+                          </Typography>
+                        </Box>
+                        {wallet.balance[item] ? (
+                          <Box display="flex" gap={0.5} alignItems="center">
+                            <AccountBalanceWalletIcon
+                              fontSize="small"
+                              color="secondary"
+                            />
+                            <Typography variant="h6">
+                              {wallet.balance[item]} ETH
+                            </Typography>
+                          </Box>
+                        ) : (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={() => fetchBalance(item)}
+                          >
+                            Fetch Balance
+                          </Button>
+                        )}
+                      </Box>
+                    ))
+                  ) : (
+                    <Typography>No Connected Accounts</Typography>
+                  )}
+                </>
               )}
             </Paper>
           ) : (
