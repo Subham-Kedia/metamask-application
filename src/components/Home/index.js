@@ -377,6 +377,7 @@ const Home = () => {
       ) : (
         <ShowMessage
           src="/assets/metamask.png"
+          sx={{ height: 144, width: 256 }}
           title="Welcome to our Application"
           message="Please install MetaMask Extension in your
         browser or if already installed, Please enabled it under manage extension"
